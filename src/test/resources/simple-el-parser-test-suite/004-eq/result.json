@@ -1,0 +1,6 @@
+{
+  "EQ": [
+    {"VARIABLE": "a"},
+    {"VARIABLE": "b"}
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "AND": [
+    {"VARIABLE": "a"},
+    {"VARIABLE": "b"}
+  ]
+}
