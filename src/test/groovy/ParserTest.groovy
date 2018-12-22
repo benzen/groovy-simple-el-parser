@@ -4,7 +4,6 @@ import groovy.util.GroovyTestCase
 
 class ParserTest  extends GroovyTestCase {
   def getFile(pathInClassPath){
-    println pathInClassPath
     new File(getClass().getResource(pathInClassPath).file)
   }
   void testAll(){
@@ -38,6 +37,7 @@ class ParserTest  extends GroovyTestCase {
       } catch (Exception e){
         def expectedError = unit.error
         def actualError = e.message
+        e.printStackTrace()
         assert expectedError ==  actualError
       }
     }
