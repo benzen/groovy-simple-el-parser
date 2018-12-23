@@ -89,8 +89,7 @@ class Tokenizer {
     tokenizeExactString('neq', "!=", input, current)
   }
   def skipWhiteSpaces(input, current){
-    // println "Input "+ input + "currnet"+ current
-    // println (input.substring(current) ==~ /^\s+/)
+
     def matcher = input.substring(current) =~ /^\s+/
     if(matcher){
       return [matcher[0].size(), null]
