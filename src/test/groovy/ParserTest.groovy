@@ -31,7 +31,8 @@ class ParserTest  extends GroovyTestCase {
       ]
 
       try {
-        def parsedExpression = Parser.parse(unit.exp)
+
+        def parsedExpression = new Parser().parse(unit.exp)
         def expected = unit.result
         assert  expected == parsedExpression
       } catch (Exception e){

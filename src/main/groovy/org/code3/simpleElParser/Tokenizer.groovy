@@ -33,7 +33,8 @@ class Tokenizer {
       while(ch && ch ==~ pattern){
         value = ch
         consumedCh++
-        ch = input.substring(0, consumedCh)
+
+        ch = input.substring(current, current+consumedCh -1)
       }
       [consumedCh, [type: type, value: value]]
     } else {
@@ -43,10 +44,10 @@ class Tokenizer {
   // ----------------------HELPERS----------------------------------------------
 
   def tokenizeOpenPar(input, current) {
-    tokenizeCharacter('parent', '(', input, current)
+    tokenizeCharacter('lp', '(', input, current)
   }
   def tokenizeClosePar(input, current) {
-    tokenizeCharacter('parent', ')', input, current)
+    tokenizeCharacter('rp', ')', input, current)
   }
   def tokenizeNot(input, current) {
     tokenizeCharacter('not', '!', input, current)
@@ -58,7 +59,7 @@ class Tokenizer {
     tokenizeCharacter('gt', '>', input, current)
   }
   def tokenizeFloat(input, current) {
-    tokenizePattern('int', /^\d+\.\d+/ ,input, current)
+    tokenizePattern('float', /^\d+\.\d+/ ,input, current)
   }
   def tokenizeInterger(input, current) {
     tokenizePattern('int', /^\d+/ ,input, current)
@@ -81,6 +82,12 @@ class Tokenizer {
   def tokenizeLte(input, current){
     tokenizeExactString('lte', "<=", input, current)
   }
+  def tokenizeEq(input, current){
+    tokenizeExactString('eq', "==", input, current)
+  }
+  def tokenizeNEq(input, current){
+    tokenizeExactString('neq', "!=", input, current)
+  }
   def skipWhiteSpaces(input, current){
     // println "Input "+ input + "currnet"+ current
     // println (input.substring(current) ==~ /^\s+/)
@@ -93,6 +100,8 @@ class Tokenizer {
   def tokenize(String input){
     def tokenizers = [
       this.&skipWhiteSpaces,
+      this.&tokenizeEq,
+      this.&tokenizeNEq,
       this.&tokenizeOpenPar,
       this.&tokenizeClosePar,
       this.&tokenizeOr,
@@ -106,6 +115,7 @@ class Tokenizer {
       this.&tokenizeFloat,
       this.&tokenizeInterger,
       this.&tokenizeString
+
     ]
     def current = 0
     def tokens = []
@@ -126,7 +136,10 @@ class Tokenizer {
       else {
         def (nbChConsumed, token) = tokenizer(input, current)
         current = current + nbChConsumed
-        tokens.push(token)
+        if(token){
+          tokens.push(token)
+        }
+
       }
     }
     tokens
