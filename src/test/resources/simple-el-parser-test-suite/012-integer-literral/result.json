@@ -1,6 +1,0 @@
-{
-  "EQ": [
-    {"VARIABLE": "a"},
-    {"LITTERAL": 1.5}
-  ]
-}

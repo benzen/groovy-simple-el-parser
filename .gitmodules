@@ -1,0 +1,3 @@
+[submodule "src/test/resources/simple-el-parser-test-suite"]
+	path = src/test/resources/simple-el-parser-test-suite
+	url = git@github.com:benzen/simple-el-parser-test-suite.git

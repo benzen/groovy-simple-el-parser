@@ -1,6 +1,0 @@
-{
-  "OR": [
-    {"VARIABLE": "a"},
-    {"VARIABLE": "b"}
-  ]
-}

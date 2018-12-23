@@ -1,6 +1,0 @@
-{
-  "NEQ": [
-    {"VARIABLE": "a"},
-    {"VARIABLE": "b"}
-  ]
-}
