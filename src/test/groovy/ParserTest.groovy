@@ -18,8 +18,8 @@ class ParserTest  extends GroovyTestCase {
        "008-gte",
        "009-neq",
        "011-string-literral",
-       "012-integer-literral",
-       "013-float-literral",
+       "012-float-literral",
+       "013-integer-literral",
     ]
     .each {
       println "Testing $it"

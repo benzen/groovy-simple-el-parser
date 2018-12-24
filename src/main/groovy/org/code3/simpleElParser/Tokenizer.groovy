@@ -26,20 +26,21 @@ class Tokenizer {
     value == input.substring(current, current+size) ? [size, [type: type, value: value]] : notToken()
   }
   def private tokenizePattern(type, pattern, input, current) {
-    def ch =  input[current]
-    def consumedCh = 0
-    if (ch ==~ pattern) {
-      def value = ""
-      while(ch && ch ==~ pattern){
-        value = ch
-        consumedCh++
+    def consumedCh = input.size() - current
+    def str =  input.substring(current, current + consumedCh)
+    def value
 
-        ch = input.substring(current, current+consumedCh -1)
-      }
-      [consumedCh, [type: type, value: value]]
+    while(consumedCh > 0 && !(str =~ pattern)){
+      consumedCh--
+      str = input.substring(current, current+consumedCh)
+    }
+    str = input.substring(current, current+consumedCh)
+    if( consumedCh > 0){
+      return [consumedCh, [type: type, value: str]]
     } else {
       return notToken()
     }
+
   }
   // ----------------------HELPERS----------------------------------------------
 
@@ -68,7 +69,7 @@ class Tokenizer {
     tokenizePattern('string', /^\".*\"/, input, current)
   }
   def tokenizeVariable(input, current) {
-    tokenizePattern('var', /^[a-zA-z]\w*$/, input, current)
+    tokenizePattern('var', /^[a-zA-z]*$/, input, current)
   }
   def tokenizeAnd(input, current){
     tokenizeExactString('and', "&&", input, current)
