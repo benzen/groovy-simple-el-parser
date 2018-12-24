@@ -27,15 +27,14 @@ class Tokenizer {
   }
   def private tokenizePattern(type, pattern, input, current) {
     def consumedCh = input.size() - current
-    def str =  input.substring(current, current + consumedCh)
-    def value
+    def str = input.substring(current, current + consumedCh)
 
-    while(consumedCh > 0 && !(str =~ pattern)){
+    while(consumedCh > 0 && !(str ==~ pattern)){
       consumedCh--
       str = input.substring(current, current+consumedCh)
     }
-    str = input.substring(current, current+consumedCh)
-    if( consumedCh > 0){
+
+    if( str =~ pattern ){
       return [consumedCh, [type: type, value: str]]
     } else {
       return notToken()
@@ -100,10 +99,10 @@ class Tokenizer {
   def tokenize(String input){
     def tokenizers = [
       this.&skipWhiteSpaces,
-      this.&tokenizeEq,
-      this.&tokenizeNEq,
       this.&tokenizeOpenPar,
       this.&tokenizeClosePar,
+      this.&tokenizeEq,
+      this.&tokenizeNEq,
       this.&tokenizeOr,
       this.&tokenizeAnd,
       this.&tokenizeLte,
