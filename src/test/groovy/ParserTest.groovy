@@ -20,7 +20,8 @@ class ParserTest  extends GroovyTestCase {
        "011-string-literral",
        "012-float-literral",
        "013-integer-literral",
-       "021-useless-parenthesis"
+       "021-useless-parenthesis",
+       "022-use-parenthesis-to-change-groups"
     ]
     .each {
       println "Testing $it"

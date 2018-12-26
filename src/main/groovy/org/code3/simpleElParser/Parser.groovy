@@ -10,17 +10,17 @@ public class Parser {
   // https://en.wikipedia.org/wiki/Shunting-yard_algorithm
   def infixToRPN(lexems){
     def precedence = [
-      "not": 4,
-      "lt": 8,
-      "lte": 8,
-      "gt": 8,
-      "gte": 8,
-      "and": 13,
-      "or": 14,
-      "rp": 10,
-      "lp": 10,
-      "eq": 9,
-      "neq": 9,
+      "not": 15,
+      "lt": 11,
+      "lte": 11,
+      "gt": 11,
+      "gte": 11,
+      "and": 6,
+      "or": 5,
+      "rp": 19,
+      "lp": 19,
+      "eq": 10,
+      "neq": 10,
     ]
     def associativity = [
       "not": "left",
@@ -47,10 +47,12 @@ public class Parser {
         //        or (the operator at the top of the operator stack has equal precedence and is left associative))
         //       and (the operator at the top of the operator stack is not a left bracket):
         def cond = { ->
+          if(ops.size() > 0){
+          }
           ops.size() > 0 &&
-          ops[0].type != "lp" &&
-          (( precedence(ops[0].type) > precedence(lexem.type)) ||
-            (precedence(ops[0].type) == precedence(lexem.type) && associativity(ops[0].type) == "left" ))
+          ops.last().type != "lp" &&
+          (( precedence[ops.last().type] > precedence[lexem.type]) ||
+            (precedence[ops.last().type] == precedence[lexem.type] && associativity[ops.last().type] == "left" ))
         }
         while(cond()){
           output.push(ops.pop())
@@ -60,11 +62,16 @@ public class Parser {
         ops.push(lexem)
       } else if (lexem.type == "rp"){
         // TODO ensure that there a balanced paren
-        while(ops[0].type != "lp"){
+        while(ops.size() > 0  && ops.last().type != "lp"){
           output.push(ops.pop())
         }
-        output.push(ops.pop())
+        if(ops.size() == 0){
+          //TODO keep track of position
+          throw new RuntimeException("Unbalanced parenthesis")
+        }
+        ops.pop()
       } else {
+        //TODO keep track of lexem position
         throw new RuntimeException("Unkown lexem type: ${lexem.type}")
       }
     }
@@ -75,7 +82,6 @@ public class Parser {
   }
 
   def buildAST(List lexemsInRPN){
-
     def output = []
     for(def lexem : lexemsInRPN){
       if (["string", "int", "float", "var"].contains(lexem.type)){
