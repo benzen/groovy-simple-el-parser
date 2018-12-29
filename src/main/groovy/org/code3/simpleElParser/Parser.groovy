@@ -4,7 +4,7 @@ public class Parser {
   def parse(String exp){
     def lexems = new Tokenizer().tokenize(exp)
     def lexemsInRPN = infixToRPN(lexems, exp)
-    def ast = buildAST(lexemsInRPN)
+    def ast = buildAST(lexemsInRPN, exp)
   }
 
   // https://en.wikipedia.org/wiki/Shunting-yard_algorithm
@@ -92,13 +92,20 @@ public class Parser {
     output
   }
 
-  def buildAST(List lexemsInRPN){
+  def buildAST(List lexemsInRPN, String exp){
     def output = []
     for(def lexem : lexemsInRPN){
       if (["string", "int", "float", "var"].contains(lexem.type)){
         output.push(lexem)
       } else if(["lt", "lte", "gt", "gte", "eq", "neq", "and", "or" ].contains(lexem.type)) {
-        if(output.size()< 2){ throw new RuntimeException("Malformed expression")}
+        if(output.size()< 2){
+          def msg = """
+          Missing operand around '$lexem.value' on character $lexem.start
+          $exp
+          ${" ".multiply(lexem.start)}${"^".multiply(lexem.value.size())}
+          """.stripIndent().trim()
+          throw new RuntimeException(msg)
+        }
         def rhs = output.pop()
         def lhs = output.pop()
         lexem.children = [lhs, rhs]

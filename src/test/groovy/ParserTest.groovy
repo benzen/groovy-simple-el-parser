@@ -24,7 +24,8 @@ class ParserTest  extends GroovyTestCase {
        "022-use-parenthesis-to-change-groups",
        "101-unbalanced-parenthesis",
        "102-missing-left-parenthesis",
-       "103-unknown-token"
+       "103-unknown-token",
+       "104-missing-1-of-2-operand"
     ]
     .each {
       println "Testing $it"
