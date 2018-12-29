@@ -15,7 +15,7 @@ class Tokenizer {
   // ----------------------HELPERS----------------------------------------------
   def private notToken(){return [0, null]}
   def private tokenizeCharacter(type, value, input, current){
-    value == input[current] ? [1, [type: type, value: value]] : notToken()
+    value == input[current] ? [1, [type: type, value: value, start: current]] : notToken()
   }
   def private tokenizeExactString(type, value, input, current){
     def size = value.size()
@@ -23,7 +23,7 @@ class Tokenizer {
     if(!canContainsToken){
       return notToken()
     }
-    value == input.substring(current, current+size) ? [size, [type: type, value: value]] : notToken()
+    value == input.substring(current, current+size) ? [size, [type: type, value: value, start: current]] : notToken()
   }
   def private tokenizePattern(type, pattern, input, current) {
     def consumedCh = input.size() - current
@@ -35,7 +35,7 @@ class Tokenizer {
     }
 
     if( str =~ pattern ){
-      return [consumedCh, [type: type, value: str]]
+      return [consumedCh, [type: type, value: str, start: current]]
     } else {
       return notToken()
     }
@@ -43,52 +43,52 @@ class Tokenizer {
   }
   // ----------------------HELPERS----------------------------------------------
 
-  def tokenizeOpenPar(input, current) {
+  def private tokenizeOpenPar(input, current) {
     tokenizeCharacter('lp', '(', input, current)
   }
-  def tokenizeClosePar(input, current) {
+  def private tokenizeClosePar(input, current) {
     tokenizeCharacter('rp', ')', input, current)
   }
-  def tokenizeNot(input, current) {
+  def private tokenizeNot(input, current) {
     tokenizeCharacter('not', '!', input, current)
   }
-  def tokenizeLt(input, current) {
+  def private tokenizeLt(input, current) {
     tokenizeCharacter('lt', '<', input, current)
   }
-  def tokenizeGt(input, current) {
+  def private tokenizeGt(input, current) {
     tokenizeCharacter('gt', '>', input, current)
   }
-  def tokenizeFloat(input, current) {
+  def private tokenizeFloat(input, current) {
     tokenizePattern('float', /^\d+\.\d+/ ,input, current)
   }
-  def tokenizeInterger(input, current) {
+  def private tokenizeInterger(input, current) {
     tokenizePattern('int', /^\d+/ ,input, current)
   }
-  def tokenizeString(input, current) {
+  def private tokenizeString(input, current) {
     tokenizePattern('string', /^\".*\"/, input, current)
   }
-  def tokenizeVariable(input, current) {
+  def private tokenizeVariable(input, current) {
     tokenizePattern('var', /^[a-zA-z]*$/, input, current)
   }
-  def tokenizeAnd(input, current){
+  def private tokenizeAnd(input, current){
     tokenizeExactString('and', "&&", input, current)
   }
-  def tokenizeOr(input, current){
+  def private tokenizeOr(input, current){
     tokenizeExactString('or', "||", input, current)
   }
-  def tokenizeGte(input, current){
+  def private tokenizeGte(input, current){
     tokenizeExactString('gte', ">=", input, current)
   }
-  def tokenizeLte(input, current){
+  def private tokenizeLte(input, current){
     tokenizeExactString('lte', "<=", input, current)
   }
-  def tokenizeEq(input, current){
+  def private tokenizeEq(input, current){
     tokenizeExactString('eq', "==", input, current)
   }
-  def tokenizeNEq(input, current){
+  def private tokenizeNEq(input, current){
     tokenizeExactString('neq', "!=", input, current)
   }
-  def skipWhiteSpaces(input, current){
+  def private skipWhiteSpaces(input, current){
 
     def matcher = input.substring(current) =~ /^\s+/
     if(matcher){
@@ -96,6 +96,7 @@ class Tokenizer {
     }
     return [0, null]
   }
+
   def tokenize(String input){
     def tokenizers = [
       this.&skipWhiteSpaces,
@@ -126,10 +127,10 @@ class Tokenizer {
       }
       if(!tokenizer) {
         def msg = """
-        Unrecognize character \"${input[current]}\"  at position $current
+        Unrecognized character \"${input[current]}\"  on character $current
         ${input}
-        ${"".padLeft(current)}^
-        """
+        ${"^".padLeft(current)}
+        """.stripIndent().trim()
         throw new RuntimeException(msg)
       }
       else {

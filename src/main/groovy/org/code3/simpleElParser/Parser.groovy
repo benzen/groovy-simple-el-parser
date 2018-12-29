@@ -3,12 +3,12 @@ package org.code3.simpleELParser
 public class Parser {
   def parse(String exp){
     def lexems = new Tokenizer().tokenize(exp)
-    def lexemsInRPN = infixToRPN(lexems)
+    def lexemsInRPN = infixToRPN(lexems, exp)
     def ast = buildAST(lexemsInRPN)
   }
 
   // https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-  def infixToRPN(lexems){
+  def infixToRPN(lexems, exp){
     def precedence = [
       "not": 15,
       "lt": 11,
@@ -42,10 +42,7 @@ public class Parser {
       if(["string", "int", "float", "var"].contains(lexem.type)){
         output.push(lexem)
       } else if(["lt", "lte", "gt", "gte", "eq", "neq", "not", "and", "or" ].contains(lexem.type)) {
-        // ((there is a function at the top of the operator stack)
-        //        or (there is an operator at the top of the operator stack with greater precedence)
-        //        or (the operator at the top of the operator stack has equal precedence and is left associative))
-        //       and (the operator at the top of the operator stack is not a left bracket):
+
         def cond = { ->
           if(ops.size() > 0){
           }
@@ -67,13 +64,27 @@ public class Parser {
         }
         if(ops.size() == 0){
           //TODO keep track of position
-          throw new RuntimeException("Unbalanced parenthesis")
+          def msg = """
+          Unbalanced parenthesis ending on character $lexem.start
+          ${exp}
+          ${"^".padLeft(lexem.start+1)}
+          """.stripIndent().trim()
+          throw new RuntimeException(msg)
         }
         ops.pop()
       } else {
         //TODO keep track of lexem position
         throw new RuntimeException("Unkown lexem type: ${lexem.type}")
       }
+    }
+    if(ops.any({ op -> op.type=="lp"}) && ops.every({op -> op.type != "rp"})){
+      def token = ops.find({op -> op.type == "lp"})
+      def msg = """
+      Unbalanced parenthesis starting on character $token.start
+      ${exp}
+      ${"^".padLeft(token.start)}
+      """.stripIndent().trim()
+      throw new RuntimeException(msg)
     }
     while (ops.size () > 0){
       output.push(ops.pop())

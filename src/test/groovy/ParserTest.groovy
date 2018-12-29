@@ -21,15 +21,18 @@ class ParserTest  extends GroovyTestCase {
        "012-float-literral",
        "013-integer-literral",
        "021-useless-parenthesis",
-       "022-use-parenthesis-to-change-groups"
+       "022-use-parenthesis-to-change-groups",
+       "101-unbalanced-parenthesis",
+       "102-missing-left-parenthesis",
+       "103-unknown-token"
     ]
     .each {
       println "Testing $it"
       def unit = [
         test: it,
-        // error: getFile("/simple-el-parser-test-suite/$it/error.txt").text.trim(),
         exp: getFile("/simple-el-parser-test-suite/$it/exp.txt").text.trim(),
-        result: new JsonSlurper().parseText(getFile("/simple-el-parser-test-suite/$it/result.json").text.trim())
+        result: new JsonSlurper().parseText(getFile("/simple-el-parser-test-suite/$it/result.json").text.trim()),
+        error: getFile("/simple-el-parser-test-suite/$it/error.txt").text.trim(),
       ]
 
       try {
@@ -38,9 +41,9 @@ class ParserTest  extends GroovyTestCase {
         def expected = unit.result
         assert  expected == parsedExpression
       } catch (Exception e){
+        // e.printStackTrace()
         def expectedError = unit.error
         def actualError = e.message
-        e.printStackTrace()
         assert expectedError ==  actualError
       }
     }
