@@ -25,6 +25,7 @@ class Tokenizer {
     }
     value == input.substring(current, current+size) ? [size, [type: type, value: value, start: current]] : notToken()
   }
+
   def private tokenizePattern(type, pattern, input, current) {
     def consumedCh = input.size() - current
     def str = input.substring(current, current + consumedCh)
@@ -59,10 +60,10 @@ class Tokenizer {
     tokenizeCharacter('gt', '>', input, current)
   }
   def private tokenizeFloat(input, current) {
-    tokenizePattern('float', /^\d+\.\d+/ ,input, current)
+    tokenizePattern('float', /^-?\d+\.\d+/ ,input, current)
   }
   def private tokenizeInterger(input, current) {
-    tokenizePattern('int', /^\d+/ ,input, current)
+    tokenizePattern('int', /^-?\d+/ ,input, current)
   }
   def private tokenizeString(input, current) {
     tokenizePattern('string', /^\".*\"/, input, current)
