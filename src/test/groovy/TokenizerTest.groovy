@@ -5,28 +5,29 @@ import groovy.util.GroovyTestCase
 class TokenizerTest extends GroovyTestCase {
   void testInteger(){
     def tokens = new Tokenizer().tokenize("123")
-    def expectedTokens = [[type:"int", value:"123", start:0]]
+    def expectedTokens = [[type:"int", value:new Integer(123), start:0]]
     assert tokens == expectedTokens
   }
   void testNegativeInteger(){
     def tokens = new Tokenizer().tokenize("-123")
-    def expectedTokens = [[type:"int", value:"-123", start:0]]
+    def expectedTokens = [[type:"int", value:new Integer(-123), start:0]]
     assert tokens == expectedTokens
   }
 
   void testFloat(){
     def tokens = new Tokenizer().tokenize("123.21")
-    def expectedTokens = [[type:"float", value:"123.21", start:0]]
+    def expectedTokens = [[type:"float", value:new Float(123.21), start:0]]
     assert tokens == expectedTokens
   }
   void testNegativeFloat(){
     def tokens = new Tokenizer().tokenize("-123.21")
-    def expectedTokens = [[type:"float", value:"-123.21", start:0]]
+    def expectedTokens = [[type:"float", value:new Float(-123.21), start:0]]
+
     assert tokens == expectedTokens
   }
   void testString(){
     def tokens = new Tokenizer().tokenize("\"abc\"")
-    def expectedTokens = [[type:"string", value:"\"abc\"", start:0]]
+    def expectedTokens = [[type:"string", value:"abc", start:0]]
     assert tokens == expectedTokens
   }
   void testAnd(){
@@ -58,7 +59,7 @@ class TokenizerTest extends GroovyTestCase {
 
   void testMoreComplexeExpression(){
     def tokens = new Tokenizer().tokenize("a == \"def\"")
-    def expectedTokens = [[type:"var", value:"a", start:0], [type:"eq", value:"==", start:2], [type:"string", value:"\"def\"", start:5]]
+    def expectedTokens = [[type:"var", value:"a", start:0], [type:"eq", value:"==", start:2], [type:"string", value:"def", start:5]]
     assert tokens == expectedTokens
   }
 }
