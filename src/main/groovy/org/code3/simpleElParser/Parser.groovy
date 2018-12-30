@@ -111,7 +111,14 @@ public class Parser {
         lexem.children = [lhs, rhs]
         output.push(lexem)
       } else if (lexem.type== "not"){
-        if(output.size() < 1) {throw new RuntimeException("Malformed expression")}
+        if(output.size() < 1) {
+          def msg = """
+          Missing operand next to '$lexem.value' on character $lexem.start
+          $exp
+          ${" ".multiply(lexem.start)}${"^".multiply(lexem.value.size())}
+          """.stripIndent().trim()
+          throw new RuntimeException(msg)
+        }
         lexem.children = output.pop()
         output.push(lexem)
       }
