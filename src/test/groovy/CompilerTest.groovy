@@ -22,6 +22,7 @@ class CompilerTest  extends GroovyTestCase {
        "013-integer-literral",
        "021-useless-parenthesis",
        "022-use-parenthesis-to-change-groups",
+       "031-dotted-variable",
        "101-unbalanced-parenthesis",
        "102-missing-left-parenthesis",
        "103-unknown-token",
