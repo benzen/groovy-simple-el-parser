@@ -6,7 +6,7 @@ class Compiler {
     def tokenizer = new Tokenizer()
 
     def lexems = tokenizer.tokenize(expression)
-    def ast = parser.parse(expression, lexems)
+    def ast = parser.parse(lexems, expression)
     ast
   }
 }

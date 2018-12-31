@@ -1,8 +1,8 @@
-import org.code3.simpleELParser.Parser
+import org.code3.simpleELParser.Compiler
 import groovy.json.JsonSlurper
 import groovy.util.GroovyTestCase
 
-class ParserTest  extends GroovyTestCase {
+class CompilerTest  extends GroovyTestCase {
   def getFile(pathInClassPath){
     new File(getClass().getResource(pathInClassPath).file)
   }
@@ -40,7 +40,7 @@ class ParserTest  extends GroovyTestCase {
 
       try {
 
-        def parsedExpression = new Parser().parse(unit.exp)
+        def parsedExpression = new Compiler().compile(unit.exp)
         def expected = unit.result
         assert  expected == parsedExpression
       } catch (Exception e){

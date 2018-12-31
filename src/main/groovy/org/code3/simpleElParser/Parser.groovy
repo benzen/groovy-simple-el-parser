@@ -1,10 +1,9 @@
 package org.code3.simpleELParser
 
 public class Parser {
-  def parse(String exp){
-    def lexems = new Tokenizer().tokenize(exp)
-    def lexemsInRPN = infixToRPN(lexems, exp)
-    def ast = buildAST(lexemsInRPN, exp)
+  def parse(List lexems, String expression){
+    def lexemsInRPN = infixToRPN(lexems, expression)
+    def ast = buildAST(lexemsInRPN, expression)
   }
 
   // https://en.wikipedia.org/wiki/Shunting-yard_algorithm
@@ -63,7 +62,6 @@ public class Parser {
           output.push(ops.pop())
         }
         if(ops.size() == 0){
-          //TODO keep track of position
           def msg = """
           Unbalanced parenthesis ending on character $lexem.start
           ${exp}
@@ -73,7 +71,6 @@ public class Parser {
         }
         ops.pop()
       } else {
-        //TODO keep track of lexem position
         throw new RuntimeException("Unkown lexem type: ${lexem.type}")
       }
     }
