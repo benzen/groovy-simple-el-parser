@@ -1,16 +1,5 @@
 package org.code3.simpleELParser;
 
-
-// EXP: '(' TERM OP TERM ')' | TERM OP TERM | TERM
-// OP: '&&' | '||' | '<' | '<=' | '>' | '>='
-// TERM: '!' VAL | VAL
-// VAL: VAR | CONST
-// VAR: /^[a-zA-z]\w*$/
-// CONST: INT | FLOAT | STRING
-// INT: /\d+/
-// FLOAT: /\d\.\d+/
-// STRING: /\".*\"/
-
 class Tokenizer {
   // ----------------------HELPERS----------------------------------------------
   def private notToken(){return [0, null]}

@@ -14,14 +14,14 @@ This is why we used js normal priority for this language.
 Install
 --------------------------------------------------------------------------------
 
-Mavem dependecy
+Maven dependency
 
 ```
-<dependecy>
+<dependency>
   <group>org.code3<group>
   <artifactId>groovy-simple-el-parser</artifactId>
   <version>0.1</version>
-</dependecy>
+</dependency>
 ```
 Usage
 --------------------------------------------------------------------------------
