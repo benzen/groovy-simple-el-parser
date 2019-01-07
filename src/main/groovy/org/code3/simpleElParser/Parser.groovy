@@ -29,8 +29,6 @@ public class Parser {
       "gte": "right",
       "and": "right",
       "or": "right",
-      // "rp": "na",
-      // "lp": "na",
       "eq": "right",
       "neq": "right",
     ]

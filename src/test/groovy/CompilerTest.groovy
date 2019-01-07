@@ -45,7 +45,6 @@ class CompilerTest  extends GroovyTestCase {
         def expected = unit.result
         assert  expected == parsedExpression
       } catch (Exception e){
-        // e.printStackTrace()
         def expectedError = unit.error
         def actualError = e.message
         assert expectedError ==  actualError

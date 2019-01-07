@@ -61,7 +61,7 @@ class Tokenizer {
     tokenizePattern('string', /^\".*\"/, input, current, {s -> s.substring(1, s.size()-1)})
   }
   def private tokenizeVariable(input, current) {
-    tokenizePattern('var', /^[a-zA-Z_]\w*(\.[a-zA-Z_])*$/, input, current)
+    tokenizePattern('var', /^[a-zA-Z_]\w*[\.a-zA-Z_]*$/, input, current)
   }
   def private tokenizeAnd(input, current){
     tokenizeExactString('and', "&&", input, current)
