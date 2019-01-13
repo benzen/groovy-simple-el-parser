@@ -3,7 +3,7 @@ package org.code3.simpleELParser
 public class Parser {
   def parse(List lexems, String expression){
     def lexemsInRPN = infixToRPN(lexems, expression)
-    def ast = buildAST(lexemsInRPN, expression)
+    buildAST(lexemsInRPN, expression)
   }
 
   // https://en.wikipedia.org/wiki/Shunting-yard_algorithm
@@ -36,6 +36,7 @@ public class Parser {
     def ops = []
     def output = []
     for(def lexem : lexems){
+
       if(["string", "int", "float", "var"].contains(lexem.type)){
         output.push(lexem)
       } else if(["lt", "lte", "gt", "gte", "eq", "neq", "not", "and", "or" ].contains(lexem.type)) {
@@ -81,19 +82,20 @@ public class Parser {
       """.stripIndent().trim()
       throw new RuntimeException(msg)
     }
-    while (ops.size () > 0){
-      output.push(ops.pop())
-    }
+
+    output = output + ops.reverse()
     output
   }
 
   def buildAST(List lexemsInRPN, String exp){
+
     def output = []
     for(def lexem : lexemsInRPN){
       if (["string", "int", "float", "var"].contains(lexem.type)){
         output.push(lexem)
       } else if(["lt", "lte", "gt", "gte", "eq", "neq", "and", "or" ].contains(lexem.type)) {
         if(output.size()< 2){
+
           def msg = """
           Missing operand around '$lexem.value' on character $lexem.start
           $exp
